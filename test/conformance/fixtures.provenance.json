@@ -1,0 +1,10 @@
+{
+  "_comment": [
+    "Provenance for the vendored Vinctor conformance fixtures.",
+    "The conformance test recomputes the SHA-256 of fixtures.json and fails",
+    "unless it matches this value. Re-vendor both files from the pinned",
+    "vinctor-conformance main commit; never hand-edit the fixture copy."
+  ],
+  "source": "github.com/pkachuc/vinctor-conformance@23f4b5465bd0e8b676d1d14aba9f9a234f99520a fixtures/{filesystem,github,shell,slack}.json",
+  "sha256": "3e8462d41c5da95bd9350e14246b0d8f57f0f082ced99ccba58f802dd988214d"
+}

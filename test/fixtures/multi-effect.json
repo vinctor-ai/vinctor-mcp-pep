@@ -1,0 +1,700 @@
+{
+  "version": 1,
+  "note": [
+    "PKA-145, PKA-148. Multi-effect requirement vectors: for a compound",
+    "operation, the SET of (action, resource) pairs the PDP must be asked for.",
+    "A grant covering one pair must never authorize another.",
+    "",
+    "This catalog is hand-written, not generated from canon/taxonomy.json, because",
+    "the two things it pins cannot be expressed by a resource TEMPLATE:",
+    "  - arity is data. An apply_patch envelope carries N targets, so its required",
+    "    set has N members; a template has a fixed shape.",
+    "  - the sensitive-path overlay (fixtures/sensitive-paths.json) folds a",
+    "    credential-shaped endpoint to secret/<kind>, which no fs/{path} template",
+    "    can produce.",
+    "The fixed-arity part of the contract IS in the canon: canon entries carry",
+    "`alsoRequires`, and fixtures/filesystem.json therefore pins move_file's three",
+    "effects as generated data. This file covers what the generator cannot reach.",
+    "",
+    "`requires` is the complete set, unordered; `primary` is the pair an adapter",
+    "reports as its single canon-comparable mapping and MUST be a member of",
+    "`requires`. `requires: []` with `primary: null` means NO pair may be charged,",
+    "for either of two reasons the `why` states: the operation is out of every",
+    "adapter's boundary and must not be mapped at all (the guard against a",
+    "multi-effect change over-mapping ordinary work), or the call carries a member",
+    "the resource mapper cannot express, so no complete requirement set exists and",
+    "authorizing the expressible subset would run the whole call (PKA-148).",
+    "Adapters refuse the second case in their own fail-closed vocabulary; what the",
+    "canon pins is that no subset is ever authorized.",
+    "",
+    "`surface` scopes a vector to the adapters that expose it: mcp/filesystem is",
+    "the MCP filesystem server (both hooks and the MCP PEP); codex/apply_patch is",
+    "the Codex-native patch envelope (codex hook only); github/fork is the GitHub",
+    "MCP fork_repository operation (hooks and MCP PEP). Resources outside the v1",
+    "domain grammar (repo/, infra/, ci/workflow, vinctor/, and github/'s fork",
+    "kind) are the shipped adapters' protected-path policy, recorded here so the",
+    "SET is checkable even where the member resource is not canon v1 vocabulary.",
+    "PKA-150: the fork DESTINATION uses github/{owner}/_/repo - the namespace-",
+    "write form now in the canon grammar; its degraded github/_/_/repo means",
+    "`create in any namespace` and is prefix-disjoint from any specific owner.",
+    "",
+    "Every credential-shaped path below is a DECOY STRING. These are paths to",
+    "classify, never files to open."
+  ],
+  "vectors": [
+    {
+      "id": "move-file-exfiltrates-protected-source",
+      "surface": "mcp/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "repo/private.txt",
+        "destination": "tmp/allowed.txt"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "fs/tmp/allowed.txt"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "fs/tmp/allowed.txt"
+        },
+        {
+          "action": "read",
+          "resource": "fs/repo/private.txt"
+        },
+        {
+          "action": "delete",
+          "resource": "fs/repo/private.txt"
+        }
+      ],
+      "why": "The live PKA-145 exploit. Only the destination write was ever asked for, so a grant with no read and no delete on repo/ moved a protected file out of the subtree and removed the original - enforced, permitted, audited."
+    },
+    {
+      "id": "move-file-secret-source",
+      "surface": "mcp/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "home/u/.env",
+        "destination": "tmp/x"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "secret/env"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "secret/env"
+        },
+        {
+          "action": "read",
+          "resource": "secret/env"
+        },
+        {
+          "action": "delete",
+          "resource": "secret/env"
+        },
+        {
+          "action": "write",
+          "resource": "fs/tmp/x"
+        }
+      ],
+      "why": "A sensitive source keeps the primary pair (moving a credential away still operates on the credential), and the destination write is a separate effect that a secret/env grant must not cover."
+    },
+    {
+      "id": "move-file-secret-destination",
+      "surface": "mcp/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "tmp/x",
+        "destination": "home/u/.aws/credentials"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "secret/aws"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "secret/aws"
+        },
+        {
+          "action": "read",
+          "resource": "fs/tmp/x"
+        },
+        {
+          "action": "delete",
+          "resource": "fs/tmp/x"
+        }
+      ],
+      "why": "Overwriting a credential file from an ordinary source: the destination write is the primary pair, and the source is still read and removed."
+    },
+    {
+      "id": "move-file-secret-to-secret",
+      "surface": "mcp/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "home/u/.env",
+        "destination": "home/u/.aws/credentials"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "secret/env"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "secret/env"
+        },
+        {
+          "action": "read",
+          "resource": "secret/env"
+        },
+        {
+          "action": "delete",
+          "resource": "secret/env"
+        },
+        {
+          "action": "write",
+          "resource": "secret/aws"
+        }
+      ],
+      "why": "Two credential kinds, two grants. A secret/env grant must not write secret/aws and vice versa."
+    },
+    {
+      "id": "read-multiple-files-mixed-secret-and-ordinary",
+      "surface": "mcp/filesystem",
+      "operation": "read_multiple_files",
+      "params": {
+        "paths": ["repo/notes.txt", "home/u/.env", "home/u/.ssh/id_rsa"]
+      },
+      "primary": {
+        "action": "read",
+        "resource": "secret/env"
+      },
+      "requires": [
+        {
+          "action": "read",
+          "resource": "fs/repo/notes.txt"
+        },
+        {
+          "action": "read",
+          "resource": "secret/env"
+        },
+        {
+          "action": "read",
+          "resource": "secret/ssh"
+        }
+      ],
+      "why": "The live PKA-148 exploit. Only the FIRST credential-shaped path was ever asked for, so a grant covering secret/env read the ssh key and the ordinary file under it. The primary stays the pair the old behavior charged (the first sensitive path); every other member is its own requirement."
+    },
+    {
+      "id": "read-multiple-files-two-secrets-both-charged",
+      "surface": "mcp/filesystem",
+      "operation": "read_multiple_files",
+      "params": {
+        "paths": ["home/u/.env", "home/u/.aws/credentials"]
+      },
+      "primary": {
+        "action": "read",
+        "resource": "secret/env"
+      },
+      "requires": [
+        {
+          "action": "read",
+          "resource": "secret/env"
+        },
+        {
+          "action": "read",
+          "resource": "secret/aws"
+        }
+      ],
+      "why": "Two credential kinds, two grants — the read side of move-file-secret-to-secret. Under the single-pair mapping the second credential was never charged at all."
+    },
+    {
+      "id": "read-multiple-files-all-ordinary",
+      "surface": "mcp/filesystem",
+      "operation": "read_multiple_files",
+      "params": {
+        "paths": ["repo/a.txt", "docs/readme.md"]
+      },
+      "primary": {
+        "action": "read",
+        "resource": "fs/repo/a.txt"
+      },
+      "requires": [
+        {
+          "action": "read",
+          "resource": "fs/repo/a.txt"
+        },
+        {
+          "action": "read",
+          "resource": "fs/docs/readme.md"
+        }
+      ],
+      "why": "An all-ordinary multi-read used to defer because one pair could not express N paths; with set-valued requirements it is N ordinary reads, each charged. The primary is the first path, where the single-pair shape had nothing to report."
+    },
+    {
+      "id": "read-multiple-files-repeated-resource",
+      "surface": "mcp/filesystem",
+      "operation": "read_multiple_files",
+      "params": {
+        "paths": ["home/u/.env", "home/u2/.env"]
+      },
+      "primary": {
+        "action": "read",
+        "resource": "secret/env"
+      },
+      "requires": [
+        {
+          "action": "read",
+          "resource": "secret/env"
+        }
+      ],
+      "why": "Control: two paths that classify to the SAME resource are one requirement, not two — the set tracks distinct effects, mirroring apply-patch-repeated-target."
+    },
+    {
+      "id": "read-multiple-files-single-ordinary",
+      "surface": "mcp/filesystem",
+      "operation": "read_multiple_files",
+      "params": {
+        "paths": ["repo/notes.txt"]
+      },
+      "primary": {
+        "action": "read",
+        "resource": "fs/repo/notes.txt"
+      },
+      "requires": [
+        {
+          "action": "read",
+          "resource": "fs/repo/notes.txt"
+        }
+      ],
+      "why": "Control: a one-path list is one effect and must map exactly like the single-path read tools — list arity is data, not a reason to defer."
+    },
+    {
+      "id": "read-multiple-files-unnormalizable-member",
+      "surface": "mcp/filesystem",
+      "operation": "read_multiple_files",
+      "params": {
+        "paths": ["repo/a.txt", "/", "home/u/.env"]
+      },
+      "primary": null,
+      "requires": [],
+      "why": "A member the resource mapper cannot express voids the WHOLE set: charging the expressible subset authorizes a call that still reads the inexpressible path. The member sits mid-list so both failure shapes are caught — charging the prefix, and skipping the member. Measured 2026-07-28: mcp-pep and hermes already unmap the whole call here; the claude hook skipped the member and charged secret/env alone. That skip is the divergence this vector closes."
+    },
+    {
+      "id": "apply-patch-manifest-and-secret",
+      "surface": "codex/apply_patch",
+      "operation": "apply_patch",
+      "params": {
+        "ops": [
+          {
+            "action": "write",
+            "path": "package.json"
+          },
+          {
+            "action": "write",
+            "path": "config/.env"
+          }
+        ]
+      },
+      "primary": {
+        "action": "write",
+        "resource": "repo/manifest/npm"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/manifest/npm"
+        },
+        {
+          "action": "write",
+          "resource": "secret/env"
+        }
+      ],
+      "why": "The second live PKA-145 exploit. Candidates were sorted and one winner returned, so a manifest-write grant executed the whole patch and the credential edit was never checked."
+    },
+    {
+      "id": "apply-patch-two-protected-files",
+      "surface": "codex/apply_patch",
+      "operation": "apply_patch",
+      "params": {
+        "ops": [
+          {
+            "action": "write",
+            "path": "package.json"
+          },
+          {
+            "action": "write",
+            "path": "Dockerfile"
+          }
+        ]
+      },
+      "primary": {
+        "action": "write",
+        "resource": "repo/manifest/npm"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/manifest/npm"
+        },
+        {
+          "action": "write",
+          "resource": "infra/dockerfile"
+        }
+      ],
+      "why": "No secret involved: two ordinary in-boundary targets are still two effects, and a grant on one must not carry the other."
+    },
+    {
+      "id": "apply-patch-manifest-write-and-workflow-delete",
+      "surface": "codex/apply_patch",
+      "operation": "apply_patch",
+      "params": {
+        "ops": [
+          {
+            "action": "write",
+            "path": "package.json"
+          },
+          {
+            "action": "delete",
+            "path": ".github/workflows/ci.yml"
+          }
+        ]
+      },
+      "primary": {
+        "action": "delete",
+        "resource": "ci/workflow"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/manifest/npm"
+        },
+        {
+          "action": "delete",
+          "resource": "ci/workflow"
+        }
+      ],
+      "why": "Mixed verbs. Picking the most destructive op as the single pair loses the write, so a delete-on-ci/workflow grant silently rewrote the npm manifest."
+    },
+    {
+      "id": "apply-patch-single-secret",
+      "surface": "codex/apply_patch",
+      "operation": "apply_patch",
+      "params": {
+        "ops": [
+          {
+            "action": "write",
+            "path": "config/.env"
+          }
+        ]
+      },
+      "primary": {
+        "action": "write",
+        "resource": "secret/env"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "secret/env"
+        }
+      ],
+      "why": "Control: a one-target patch is one effect. Expressing a set must not inflate it."
+    },
+    {
+      "id": "apply-patch-repeated-target",
+      "surface": "codex/apply_patch",
+      "operation": "apply_patch",
+      "params": {
+        "ops": [
+          {
+            "action": "write",
+            "path": "a/package.json"
+          },
+          {
+            "action": "write",
+            "path": "b/package.json"
+          }
+        ]
+      },
+      "primary": {
+        "action": "write",
+        "resource": "repo/manifest/npm"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/manifest/npm"
+        }
+      ],
+      "why": "Control: two targets that classify to the SAME resource are one requirement, not two. The set is deduplicated, so the count tracks distinct effects rather than op count."
+    },
+    {
+      "id": "apply-patch-out-of-boundary-only",
+      "surface": "codex/apply_patch",
+      "operation": "apply_patch",
+      "params": {
+        "ops": [
+          {
+            "action": "write",
+            "path": "src/a.ts"
+          },
+          {
+            "action": "write",
+            "path": "src/b.ts"
+          }
+        ]
+      },
+      "primary": null,
+      "requires": [],
+      "why": "Control: ordinary source files are outside every adapter's built-in boundary. A multi-effect change must not start mapping (and charging a grant for) routine edits."
+    },
+    {
+      "id": "write-file-single-effect",
+      "surface": "mcp/filesystem",
+      "operation": "write_file",
+      "params": {
+        "path": "repo/notes.txt"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "fs/repo/notes.txt"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "fs/repo/notes.txt"
+        }
+      ],
+      "why": "Control: a plain write is one effect. No read, no delete."
+    },
+    {
+      "id": "read-text-file-single-effect",
+      "surface": "mcp/filesystem",
+      "operation": "read_text_file",
+      "params": {
+        "path": "repo/notes.txt"
+      },
+      "primary": {
+        "action": "read",
+        "resource": "fs/repo/notes.txt"
+      },
+      "requires": [
+        {
+          "action": "read",
+          "resource": "fs/repo/notes.txt"
+        }
+      ],
+      "why": "Control: a plain read is one effect."
+    },
+    {
+      "id": "delete-file-single-effect",
+      "surface": "mcp/filesystem",
+      "operation": "delete_file",
+      "params": {
+        "path": "repo/notes.txt"
+      },
+      "primary": {
+        "action": "delete",
+        "resource": "fs/repo/notes.txt"
+      },
+      "requires": [
+        {
+          "action": "delete",
+          "resource": "fs/repo/notes.txt"
+        }
+      ],
+      "why": "Control: a delete does not imply a read of what it removes."
+    },
+    {
+      "id": "hermes-move-file-secret-source",
+      "surface": "hermes/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "/home/u/.env",
+        "destination": "/tmp/x"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "fs/tmp/x"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "fs/tmp/x"
+        },
+        {
+          "action": "read",
+          "resource": "secret/env"
+        },
+        {
+          "action": "delete",
+          "resource": "secret/env"
+        }
+      ],
+      "why": "Hermes move_file previously authorized ONLY the destination write, so a write:fs/* grant moved a credential out of the tree with no read and no delete on the source. The source is a separate protected resource."
+    },
+    {
+      "id": "hermes-move-file-secret-destination",
+      "surface": "hermes/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "/tmp/x",
+        "destination": "/home/u/.aws/credentials"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "secret/aws"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "secret/aws"
+        },
+        {
+          "action": "read",
+          "resource": "fs/tmp/x"
+        },
+        {
+          "action": "delete",
+          "resource": "fs/tmp/x"
+        }
+      ],
+      "why": "Writing INTO a credential path is a secret write; the ordinary source still contributes its own read and delete."
+    },
+    {
+      "id": "hermes-move-file-in-tree",
+      "surface": "hermes/filesystem",
+      "operation": "move_file",
+      "params": {
+        "source": "src/app.py",
+        "destination": "docs/readme.md"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "repo/docs/readme.md"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/docs/readme.md"
+        },
+        {
+          "action": "read",
+          "resource": "repo/src/app.py"
+        },
+        {
+          "action": "delete",
+          "resource": "repo/src/app.py"
+        }
+      ],
+      "why": "In-tree relative paths keep Hermes' repo/ prefix; the three effects hold regardless of prefix."
+    },
+    {
+      "id": "hermes-patch-multi-target",
+      "surface": "hermes/patch",
+      "operation": "patch",
+      "params": {
+        "patch": "*** Begin Patch\n*** Update File: src/app.py\n*** Delete File: /home/u/.env\n*** Add File: /tmp/exfil\n*** End Patch"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "repo/src/app.py"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/src/app.py"
+        },
+        {
+          "action": "delete",
+          "resource": "secret/env"
+        },
+        {
+          "action": "write",
+          "resource": "fs/tmp/exfil"
+        }
+      ],
+      "why": "Arity is data: an envelope carries N targets. Hermes previously authorized only the FIRST matching operation, so bundling an Add File alongside a Delete File wrote an unauthorized path."
+    },
+    {
+      "id": "hermes-patch-single-target",
+      "surface": "hermes/patch",
+      "operation": "patch",
+      "params": {
+        "patch": "*** Begin Patch\n*** Update File: src/app.py\n*** End Patch"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "repo/src/app.py"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "repo/src/app.py"
+        }
+      ],
+      "why": "A single-target envelope keeps exactly one requirement - the multi-effect change must not invent extra checks for ordinary work."
+    },
+    {
+      "id": "fork-repository-into-org",
+      "surface": "github/fork",
+      "operation": "fork_repository",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "organization": "myorg"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "github/acme/api/fork"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "github/acme/api/fork"
+        },
+        {
+          "action": "read",
+          "resource": "github/acme/api/contents"
+        },
+        {
+          "action": "write",
+          "resource": "github/myorg/_/repo"
+        }
+      ],
+      "why": "PKA-149/PKA-150. fork_repository charged only the source fork pair, so a fork grant on acme/api created a repository - and a copy of acme/api's contents - inside myorg, a namespace the operator never authorized. Three effects: the fork action on the source (primary, unchanged so existing grants keep working), the source contents read (a fork copies the repo), and the destination NAMESPACE write over the new github/{owner}/_/repo form. The destination write is a separate grant from any acme/* grant, exactly as move_file's destination is separate from its source."
+    },
+    {
+      "id": "fork-repository-no-org-still-charges-destination",
+      "surface": "github/fork",
+      "operation": "fork_repository",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "primary": {
+        "action": "write",
+        "resource": "github/acme/api/fork"
+      },
+      "requires": [
+        {
+          "action": "write",
+          "resource": "github/acme/api/fork"
+        },
+        {
+          "action": "read",
+          "resource": "github/acme/api/contents"
+        },
+        {
+          "action": "write",
+          "resource": "github/_/_/repo"
+        }
+      ],
+      "why": "With no destination organization the fork still creates a repository - in the authenticated user's namespace, which the adapter cannot name, so it degrades to the deliberately-unscoped github/_/_/repo. The destination write must not vanish just because the namespace is unspecified; an operator who wants to allow forks into the agent's own account grants that coarse resource explicitly, and it is prefix-disjoint from any org's github/{owner}/_/repo."
+    }
+  ]
+}

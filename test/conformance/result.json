@@ -1,0 +1,620 @@
+{
+  "adapter": "mcp-pep",
+  "fixtures_version": "c38e7d42ab09f921e9eb93293bb532d3a27d03ac67c7b2d80850fa498fbcbe3d",
+  "results": [
+    {
+      "id": "filesystem-create-directory",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-delete-file",
+      "status": "agrees",
+      "got": {
+        "action": "delete",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-delete-file-2",
+      "status": "agrees",
+      "got": {
+        "action": "delete",
+        "resource": "fs/var/data/reports/q3.csv"
+      }
+    },
+    {
+      "id": "filesystem-directory-tree",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-edit-file",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-get-file-info",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-list-directory",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-move-file",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "fs/home/dev/project/final.txt",
+        "alsoRequires": [
+          {
+            "action": "read",
+            "resource": "fs/home/dev/project/draft.txt"
+          },
+          {
+            "action": "delete",
+            "resource": "fs/home/dev/project/draft.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "filesystem-read-file",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-read-media-file",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-read-text-file",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-remove-directory",
+      "status": "agrees",
+      "got": {
+        "action": "delete",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-search-files",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-write-file",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-write-file-2",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "fs/var/data/reports/q3.csv"
+      }
+    },
+    {
+      "id": "github-add-issue-comment",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-cancel-workflow-run",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-create-branch",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-create-issue",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-create-or-update-file",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-create-pull-request",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-create-pull-request-review",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-create-release",
+      "status": "agrees",
+      "got": {
+        "action": "deploy",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-create-repository",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/_/repo"
+      }
+    },
+    {
+      "id": "github-delete-file",
+      "status": "agrees",
+      "got": {
+        "action": "delete",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-delete-file-2",
+      "status": "agrees",
+      "got": {
+        "action": "delete",
+        "resource": "github/widgets-inc/web-app/contents"
+      }
+    },
+    {
+      "id": "github-delete-workflow-run-logs",
+      "status": "agrees",
+      "got": {
+        "action": "delete",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-get-file-contents",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-get-issue",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-get-pull-request",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-get-release",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-get-secret-scanning-alert",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/secret"
+      }
+    },
+    {
+      "id": "github-get-workflow-run",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-list-branches",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-list-commits",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-list-issues",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-list-pull-requests",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-list-releases",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-list-secret-scanning-alerts",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/secret"
+      }
+    },
+    {
+      "id": "github-list-workflows",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-merge-pull-request",
+      "status": "agrees",
+      "got": {
+        "action": "deploy",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-merge-pull-request-2",
+      "status": "agrees",
+      "got": {
+        "action": "deploy",
+        "resource": "github/widgets-inc/web-app/pr"
+      }
+    },
+    {
+      "id": "github-publish-release",
+      "status": "agrees",
+      "got": {
+        "action": "deploy",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-push-files",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-push-files-2",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/widgets-inc/web-app/contents"
+      }
+    },
+    {
+      "id": "github-rerun-workflow-run",
+      "status": "agrees",
+      "got": {
+        "action": "execute",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-run-workflow",
+      "status": "agrees",
+      "got": {
+        "action": "execute",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-run-workflow-2",
+      "status": "agrees",
+      "got": {
+        "action": "execute",
+        "resource": "github/widgets-inc/web-app/workflow"
+      }
+    },
+    {
+      "id": "github-update-issue",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-update-pull-request",
+      "status": "agrees",
+      "got": {
+        "action": "write",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "shell-docker-build",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-docker-push",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-docker-push-2",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-docker-rmi",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-docker-run",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-gh-pr-merge",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-gh-release-create",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-gh-secret-set",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-add",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-branch-d",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-clean-f",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-clone",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-commit",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-diff",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-fetch",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-log",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-pull",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-push",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-push-2",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-push-force",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-push-force-2",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-reset-hard",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-show",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-stash",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-git-status",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npm-ci",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npm-install",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npm-publish",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npm-publish-2",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npm-run",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npm-test",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-npx",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-pipe-to-shell",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-rm",
+      "status": "not-applicable"
+    },
+    {
+      "id": "shell-rmdir",
+      "status": "not-applicable"
+    },
+    {
+      "id": "slack-add-reaction",
+      "status": "agrees",
+      "got": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-conversations-history",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-get-messages",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-list-channels",
+      "status": "agrees",
+      "got": {
+        "action": "read",
+        "resource": "chat/slack"
+      }
+    },
+    {
+      "id": "slack-post-message",
+      "status": "agrees",
+      "got": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-post-message-2",
+      "status": "agrees",
+      "got": {
+        "action": "send",
+        "resource": "chat/slack/C042ENGOPS"
+      }
+    },
+    {
+      "id": "slack-reply",
+      "status": "agrees",
+      "got": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-send-message",
+      "status": "agrees",
+      "got": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    }
+  ]
+}
