@@ -1,0 +1,21 @@
+{
+  "_comment": [
+    "Provenance for the VENDORED copy of the canonical multi-effect",
+    "requirement vectors (PKA-145/PKA-148). test/multi-effect-vectors.test.ts",
+    "recomputes the sha256 of the vendored file and fails if it differs, so",
+    "the fixture cannot be edited in this repo without re-vendoring from the",
+    "source below — a one-sided change cannot pass CI silently. Same mechanism",
+    "as sensitive-paths.json in this directory and the hooks' vendored copies.",
+    "To change the contract: change it in vinctor-conformance, then re-vendor",
+    "here AND in every sibling adapter, updating source + sha256 in each.",
+    "",
+    "`source` MUST name a commit REACHABLE FROM vinctor-conformance main, and",
+    "the reachability MUST be checked before the sha is written down:",
+    "    git -C <conformance> fetch --prune",
+    "    git -C <conformance> merge-base --is-ancestor <sha> origin/main",
+    "Recompute the sha256 from that commit as well, rather than copying a",
+    "value out of a review comment."
+  ],
+  "source": "github.com/pkachuc/vinctor-conformance@1c5d3d020cd5e49785cf45600efb443e132be66a fixtures/multi-effect.json",
+  "sha256": "7d29a8b08177b2df6acda962c2da46a33298972477b9af1f2b691036a7702a10"
+}

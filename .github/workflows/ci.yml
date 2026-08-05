@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      # Public, full-SHA-pinned core baseline exposing the versioned
+      # subject_token_verified contract that the E2E asserts.
+      #
+      # PKA-120: this SHA is kept permanently reachable by the immutable tag
+      # vinctor-ai/vinctor-core refs/tags/e2e-baseline/subject-token-verified.
+      # Before that tag it was reachable ONLY as the head of the already-merged
+      # branch fix/pka-61-graceful-sigterm; deleting that branch during routine
+      # cleanup would have made this ref unfetchable and left the public
+      # vinctor-ai mirror's ruleset-required Node 20/22 test checks permanently
+      # red, with no re-pin target — public main and v0.5.0 still
+      # carry the pre-rename identity_proven and zero subject_token_verified.
+      # We install the SHA, not the tag, so the baseline stays immutable even
+      # if a tag were ever moved.
+      #
+      # To move the baseline: publish the newer contract commit on a durable
+      # public ref, tag it, then update VINCTOR_CORE_REF *and* the
+      # subject_token_verified assertions in test-e2e/ in the SAME commit.
+      # Never replace this with a floating main/latest: the E2E asserts a
+      # versioned contract, and drift would then fail open instead of red.
+      VINCTOR_CORE_REF: 118ae5f5e709755b55cad98a09c2f94d33c561ab
+      # This immutable public baseline predates `keys create pep`; its
+      # non-revoking create semantics are covered by vinctor-core, while this
+      # cross-repo E2E exercises the same PEP resolver using the legacy
+      # first-key spelling. Release QA leaves this unset and therefore runs
+      # the documented `keys create pep` path against the candidate Core.
+      VINCTOR_E2E_PEP_PROVISION_VERB: rotate
+    strategy:
+      matrix:
+        node: [20, 22]
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903  # v6
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5
+        with:
+          python-version: "3.11"
+      - run: npm ci
+      - run: npm test
+      - name: Configure E2E paths
+        run: echo "VINCTOR_CORE_DIR=$RUNNER_TEMP/vinctor-core" >> "$GITHUB_ENV"
+      - name: Install pinned real Vinctor core
+        run: |
+          python -m venv "$VINCTOR_CORE_DIR/.venv"
+          "$VINCTOR_CORE_DIR/.venv/bin/python" -m pip install \
+            "git+https://github.com/vinctor-ai/vinctor-core.git@$VINCTOR_CORE_REF"
+      - name: Pack and install the npm artifact
+        run: |
+          mkdir -p "$RUNNER_TEMP/mcp-package" "$RUNNER_TEMP/mcp-package-install"
+          npm pack --pack-destination "$RUNNER_TEMP/mcp-package"
+          package="$(find "$RUNNER_TEMP/mcp-package" -type f -name '*.tgz' -print -quit)"
+          test -n "$package"
+          npm install --prefix "$RUNNER_TEMP/mcp-package-install" \
+            "$package"
+          echo "VINCTOR_MCP_PEP_BIN=$RUNNER_TEMP/mcp-package-install/node_modules/.bin/vinctor-mcp-pep" \
+            >> "$GITHUB_ENV"
+      - name: Run packaged-proxy real-core E2E
+        run: npm run test:e2e

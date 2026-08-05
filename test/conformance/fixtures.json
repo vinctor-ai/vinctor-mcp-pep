@@ -1,0 +1,1210 @@
+{
+  "fixtures_version": "c38e7d42ab09f921e9eb93293bb532d3a27d03ac67c7b2d80850fa498fbcbe3d",
+  "source": "github.com/pkachuc/vinctor-conformance@23f4b5465bd0e8b676d1d14aba9f9a234f99520a fixtures/{filesystem,github,shell,slack}.json",
+  "fixtures": [
+    {
+      "id": "filesystem-read-text-file",
+      "family": "filesystem",
+      "operation": "read_text_file",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-read-file",
+      "family": "filesystem",
+      "operation": "read_file",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-read-media-file",
+      "family": "filesystem",
+      "operation": "read_media_file",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-list-directory",
+      "family": "filesystem",
+      "operation": "list_directory",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-directory-tree",
+      "family": "filesystem",
+      "operation": "directory_tree",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-search-files",
+      "family": "filesystem",
+      "operation": "search_files",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-get-file-info",
+      "family": "filesystem",
+      "operation": "get_file_info",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-write-file",
+      "family": "filesystem",
+      "operation": "write_file",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-write-file-2",
+      "family": "filesystem",
+      "operation": "write_file",
+      "params": {
+        "path": "var/data/reports/q3.csv"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "fs/var/data/reports/q3.csv"
+      }
+    },
+    {
+      "id": "filesystem-edit-file",
+      "family": "filesystem",
+      "operation": "edit_file",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-create-directory",
+      "family": "filesystem",
+      "operation": "create_directory",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-move-file",
+      "family": "filesystem",
+      "operation": "move_file",
+      "params": {
+        "destination": "home/dev/project/final.txt",
+        "source": "home/dev/project/draft.txt"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "fs/home/dev/project/final.txt",
+        "alsoRequires": [
+          {
+            "action": "read",
+            "resource": "fs/home/dev/project/draft.txt"
+          },
+          {
+            "action": "delete",
+            "resource": "fs/home/dev/project/draft.txt"
+          }
+        ]
+      }
+    },
+    {
+      "id": "filesystem-delete-file",
+      "family": "filesystem",
+      "operation": "delete_file",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "filesystem-delete-file-2",
+      "family": "filesystem",
+      "operation": "delete_file",
+      "params": {
+        "path": "var/data/reports/q3.csv"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "fs/var/data/reports/q3.csv"
+      }
+    },
+    {
+      "id": "filesystem-remove-directory",
+      "family": "filesystem",
+      "operation": "remove_directory",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "github-get-issue",
+      "family": "github",
+      "operation": "get_issue",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "issue_number": 7
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-list-issues",
+      "family": "github",
+      "operation": "list_issues",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-get-pull-request",
+      "family": "github",
+      "operation": "get_pull_request",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "pull_number": 42
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-list-pull-requests",
+      "family": "github",
+      "operation": "list_pull_requests",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-get-file-contents",
+      "family": "github",
+      "operation": "get_file_contents",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "path": "src/index.js"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-list-commits",
+      "family": "github",
+      "operation": "list_commits",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-list-branches",
+      "family": "github",
+      "operation": "list_branches",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-list-workflows",
+      "family": "github",
+      "operation": "list_workflows",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-get-workflow-run",
+      "family": "github",
+      "operation": "get_workflow_run",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "run_id": 314
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-list-releases",
+      "family": "github",
+      "operation": "list_releases",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-get-release",
+      "family": "github",
+      "operation": "get_release",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "tag": "v1.2.0"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-get-secret-scanning-alert",
+      "family": "github",
+      "operation": "get_secret_scanning_alert",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "alert_number": 5
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/secret"
+      }
+    },
+    {
+      "id": "github-list-secret-scanning-alerts",
+      "family": "github",
+      "operation": "list_secret_scanning_alerts",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "github/acme/api/secret"
+      }
+    },
+    {
+      "id": "github-create-issue",
+      "family": "github",
+      "operation": "create_issue",
+      "params": {
+        "owner": "acme",
+        "repo": "api"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-update-issue",
+      "family": "github",
+      "operation": "update_issue",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "issue_number": 7
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-add-issue-comment",
+      "family": "github",
+      "operation": "add_issue_comment",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "issue_number": 7,
+        "body": "triaged"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/issue"
+      }
+    },
+    {
+      "id": "github-create-pull-request",
+      "family": "github",
+      "operation": "create_pull_request",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "head": "feat/taxonomy",
+        "base": "main"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-update-pull-request",
+      "family": "github",
+      "operation": "update_pull_request",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "pull_number": 42
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-create-pull-request-review",
+      "family": "github",
+      "operation": "create_pull_request_review",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "pull_number": 42,
+        "event": "APPROVE"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-create-or-update-file",
+      "family": "github",
+      "operation": "create_or_update_file",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "path": "src/index.js",
+        "branch": "feat/taxonomy"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-push-files",
+      "family": "github",
+      "operation": "push_files",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "branch": "feat/taxonomy"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-push-files-2",
+      "family": "github",
+      "operation": "push_files",
+      "params": {
+        "owner": "widgets-inc",
+        "repo": "web-app",
+        "branch": "main"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/widgets-inc/web-app/contents"
+      }
+    },
+    {
+      "id": "github-create-branch",
+      "family": "github",
+      "operation": "create_branch",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "branch": "feat/taxonomy"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-cancel-workflow-run",
+      "family": "github",
+      "operation": "cancel_workflow_run",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "run_id": 314
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-merge-pull-request",
+      "family": "github",
+      "operation": "merge_pull_request",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "pull_number": 42
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "github-merge-pull-request-2",
+      "family": "github",
+      "operation": "merge_pull_request",
+      "params": {
+        "owner": "widgets-inc",
+        "repo": "web-app",
+        "pull_number": 108
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "github/widgets-inc/web-app/pr"
+      }
+    },
+    {
+      "id": "github-create-release",
+      "family": "github",
+      "operation": "create_release",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "tag": "v1.2.0"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-publish-release",
+      "family": "github",
+      "operation": "publish_release",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "tag": "v1.2.0"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "github-run-workflow",
+      "family": "github",
+      "operation": "run_workflow",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "workflow_id": "ci.yml"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-run-workflow-2",
+      "family": "github",
+      "operation": "run_workflow",
+      "params": {
+        "owner": "widgets-inc",
+        "repo": "web-app",
+        "workflow_id": "release.yml"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "github/widgets-inc/web-app/workflow"
+      }
+    },
+    {
+      "id": "github-rerun-workflow-run",
+      "family": "github",
+      "operation": "rerun_workflow_run",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "run_id": 314
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-delete-file",
+      "family": "github",
+      "operation": "delete_file",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "path": "src/index.js",
+        "branch": "feat/taxonomy"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "github-delete-file-2",
+      "family": "github",
+      "operation": "delete_file",
+      "params": {
+        "owner": "widgets-inc",
+        "repo": "web-app",
+        "path": "docs/old.md",
+        "branch": "feat/taxonomy"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "github/widgets-inc/web-app/contents"
+      }
+    },
+    {
+      "id": "github-delete-workflow-run-logs",
+      "family": "github",
+      "operation": "delete_workflow_run_logs",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "run_id": 314
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "github/acme/api/workflow"
+      }
+    },
+    {
+      "id": "github-create-repository",
+      "family": "github",
+      "operation": "create_repository",
+      "params": {
+        "owner": "acme",
+        "organization": "acme",
+        "name": "new-service"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/_/repo"
+      }
+    },
+    {
+      "id": "shell-git-status",
+      "family": "shell",
+      "operation": "git status",
+      "params": {},
+      "expected": {
+        "action": "read",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-log",
+      "family": "shell",
+      "operation": "git log",
+      "params": {},
+      "expected": {
+        "action": "read",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-diff",
+      "family": "shell",
+      "operation": "git diff",
+      "params": {},
+      "expected": {
+        "action": "read",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-show",
+      "family": "shell",
+      "operation": "git show",
+      "params": {},
+      "expected": {
+        "action": "read",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-fetch",
+      "family": "shell",
+      "operation": "git fetch",
+      "params": {
+        "url": "https://github.com/acme/api.git"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-add",
+      "family": "shell",
+      "operation": "git add",
+      "params": {},
+      "expected": {
+        "action": "write",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-commit",
+      "family": "shell",
+      "operation": "git commit",
+      "params": {},
+      "expected": {
+        "action": "write",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-stash",
+      "family": "shell",
+      "operation": "git stash",
+      "params": {},
+      "expected": {
+        "action": "write",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-pull",
+      "family": "shell",
+      "operation": "git pull",
+      "params": {
+        "url": "https://github.com/acme/api.git",
+        "branch": "main"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-clone",
+      "family": "shell",
+      "operation": "git clone",
+      "params": {
+        "url": "https://github.com/acme/api.git"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-push",
+      "family": "shell",
+      "operation": "git push",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "remote": "origin",
+        "branch": "main"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "shell-git-push-2",
+      "family": "shell",
+      "operation": "git push",
+      "params": {
+        "owner": "widgets-inc",
+        "repo": "web-app",
+        "remote": "origin",
+        "branch": "main"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/widgets-inc/web-app/contents"
+      }
+    },
+    {
+      "id": "shell-git-push-force",
+      "family": "shell",
+      "operation": "git push --force",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "remote": "origin",
+        "branch": "feat/taxonomy"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "github/acme/api/contents"
+      }
+    },
+    {
+      "id": "shell-git-push-force-2",
+      "family": "shell",
+      "operation": "git push --force",
+      "params": {
+        "owner": "widgets-inc",
+        "repo": "web-app",
+        "remote": "origin",
+        "branch": "main"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "github/widgets-inc/web-app/contents"
+      }
+    },
+    {
+      "id": "shell-git-reset-hard",
+      "family": "shell",
+      "operation": "git reset --hard",
+      "params": {},
+      "expected": {
+        "action": "delete",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-branch-d",
+      "family": "shell",
+      "operation": "git branch -D",
+      "params": {},
+      "expected": {
+        "action": "delete",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-git-clean-f",
+      "family": "shell",
+      "operation": "git clean -f",
+      "params": {},
+      "expected": {
+        "action": "delete",
+        "resource": "shell/git"
+      }
+    },
+    {
+      "id": "shell-npm-test",
+      "family": "shell",
+      "operation": "npm test",
+      "params": {},
+      "expected": {
+        "action": "execute",
+        "resource": "shell/npm"
+      }
+    },
+    {
+      "id": "shell-npm-run",
+      "family": "shell",
+      "operation": "npm run",
+      "params": {
+        "script": "build"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "shell/npm"
+      }
+    },
+    {
+      "id": "shell-npm-install",
+      "family": "shell",
+      "operation": "npm install",
+      "params": {},
+      "expected": {
+        "action": "execute",
+        "resource": "shell/npm"
+      }
+    },
+    {
+      "id": "shell-npm-ci",
+      "family": "shell",
+      "operation": "npm ci",
+      "params": {},
+      "expected": {
+        "action": "execute",
+        "resource": "shell/npm"
+      }
+    },
+    {
+      "id": "shell-npm-publish",
+      "family": "shell",
+      "operation": "npm publish",
+      "params": {
+        "name": "left-pad"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "pkg/npm/left-pad"
+      }
+    },
+    {
+      "id": "shell-npm-publish-2",
+      "family": "shell",
+      "operation": "npm publish",
+      "params": {
+        "name": "@acme/api-client"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "pkg/npm/@acme/api-client"
+      }
+    },
+    {
+      "id": "shell-npx",
+      "family": "shell",
+      "operation": "npx",
+      "params": {
+        "package": "cowsay"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "shell/npx"
+      }
+    },
+    {
+      "id": "shell-docker-build",
+      "family": "shell",
+      "operation": "docker build",
+      "params": {
+        "registry": "docker.io",
+        "image": "acme/api",
+        "tag": "1.4.2"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "container/docker.io/acme/api"
+      }
+    },
+    {
+      "id": "shell-docker-run",
+      "family": "shell",
+      "operation": "docker run",
+      "params": {
+        "registry": "docker.io",
+        "image": "acme/api",
+        "tag": "1.4.2"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "container/docker.io/acme/api"
+      }
+    },
+    {
+      "id": "shell-docker-push",
+      "family": "shell",
+      "operation": "docker push",
+      "params": {
+        "registry": "docker.io",
+        "image": "acme/api",
+        "tag": "1.4.2"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "container/docker.io/acme/api"
+      }
+    },
+    {
+      "id": "shell-docker-push-2",
+      "family": "shell",
+      "operation": "docker push",
+      "params": {
+        "registry": "ghcr.io",
+        "image": "vinctor-ai/vinctor",
+        "tag": "1.4.2"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "container/ghcr.io/vinctor-ai/vinctor"
+      }
+    },
+    {
+      "id": "shell-docker-rmi",
+      "family": "shell",
+      "operation": "docker rmi",
+      "params": {
+        "registry": "docker.io",
+        "image": "acme/api",
+        "tag": "1.4.2"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "container/docker.io/acme/api"
+      }
+    },
+    {
+      "id": "shell-rm",
+      "family": "shell",
+      "operation": "rm",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "shell-rmdir",
+      "family": "shell",
+      "operation": "rmdir",
+      "params": {
+        "path": "home/dev/project/notes.txt"
+      },
+      "expected": {
+        "action": "delete",
+        "resource": "fs/home/dev/project/notes.txt"
+      }
+    },
+    {
+      "id": "shell-pipe-to-shell",
+      "family": "shell",
+      "operation": "pipe_to_shell",
+      "params": {
+        "first_token": "curl",
+        "url": "https://example.com/install.sh"
+      },
+      "expected": {
+        "action": "execute",
+        "resource": "shell/curl"
+      }
+    },
+    {
+      "id": "shell-gh-pr-merge",
+      "family": "shell",
+      "operation": "gh pr merge",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "pull_number": 42
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "github/acme/api/pr"
+      }
+    },
+    {
+      "id": "shell-gh-release-create",
+      "family": "shell",
+      "operation": "gh release create",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "tag": "v1.2.0"
+      },
+      "expected": {
+        "action": "deploy",
+        "resource": "github/acme/api/release"
+      }
+    },
+    {
+      "id": "shell-gh-secret-set",
+      "family": "shell",
+      "operation": "gh secret set",
+      "params": {
+        "owner": "acme",
+        "repo": "api",
+        "secret_name": "DEPLOY_TOKEN"
+      },
+      "expected": {
+        "action": "write",
+        "resource": "github/acme/api/secret"
+      }
+    },
+    {
+      "id": "slack-list-channels",
+      "family": "slack",
+      "operation": "list_channels",
+      "params": {},
+      "expected": {
+        "action": "read",
+        "resource": "chat/slack"
+      }
+    },
+    {
+      "id": "slack-get-messages",
+      "family": "slack",
+      "operation": "get_messages",
+      "params": {
+        "channel": "C0123ABCD"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-conversations-history",
+      "family": "slack",
+      "operation": "conversations_history",
+      "params": {
+        "channel": "C0123ABCD"
+      },
+      "expected": {
+        "action": "read",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-post-message",
+      "family": "slack",
+      "operation": "post_message",
+      "params": {
+        "channel": "C0123ABCD",
+        "text": "build green"
+      },
+      "expected": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-post-message-2",
+      "family": "slack",
+      "operation": "post_message",
+      "params": {
+        "channel": "C042ENGOPS",
+        "text": "deploy done"
+      },
+      "expected": {
+        "action": "send",
+        "resource": "chat/slack/C042ENGOPS"
+      }
+    },
+    {
+      "id": "slack-send-message",
+      "family": "slack",
+      "operation": "send_message",
+      "params": {
+        "channel": "C0123ABCD",
+        "text": "build green"
+      },
+      "expected": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-reply",
+      "family": "slack",
+      "operation": "reply",
+      "params": {
+        "channel": "C0123ABCD",
+        "thread_ts": "1720000000.000100",
+        "text": "on it"
+      },
+      "expected": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    },
+    {
+      "id": "slack-add-reaction",
+      "family": "slack",
+      "operation": "add_reaction",
+      "params": {
+        "channel": "C0123ABCD",
+        "emoji": "white_check_mark",
+        "timestamp": "1720000000.000100"
+      },
+      "expected": {
+        "action": "send",
+        "resource": "chat/slack/C0123ABCD"
+      }
+    }
+  ]
+}

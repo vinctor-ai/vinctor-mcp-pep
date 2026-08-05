@@ -1,0 +1,28 @@
+{
+  "name": "vinctor-mcp-pep",
+  "version": "0.4.0",
+  "description": "Vinctor MCP enforcement proxy (PEP): a stdio MCP proxy that authorizes every tools/call via Vinctor delegated enforcement before forwarding it to the real server.",
+  "license": "MIT",
+  "keywords": ["mcp", "proxy", "pep", "authorization", "ai-agents", "security", "vinctor"],
+  "homepage": "https://vinctor.dev",
+  "repository": { "type": "git", "url": "git+https://github.com/vinctor-ai/vinctor-mcp-pep.git" },
+  "bugs": { "url": "https://github.com/vinctor-ai/vinctor-mcp-pep/issues" },
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "bin": { "vinctor-mcp-pep": "./dist/src/cli.js" },
+  "files": ["dist/src", "README.md", "LICENSE"],
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "tsc -p tsconfig.json && chmod +x dist/src/cli.js",
+    "prepack": "npm run build",
+    "test": "npm run build && node --test dist/test/*.test.js dist/test-integration/*.test.js",
+    "test:integration": "npm run build && node --test dist/test-integration/*.test.js",
+    "test:e2e": "npm run build && node --test dist/test-e2e/*.test.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.41",
+    "typescript": "^5.4.0"
+  }
+}
